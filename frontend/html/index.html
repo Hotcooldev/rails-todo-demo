@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo Demo</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="app.js"></script>
+</head>
+
+<body ng-app="todo">
+
+<div class="main">
+    <div class="header-container navbar navbar-default">
+        <div class="container-fluid">
+            <div class="header navbar-header">
+                <div class="brand navbar-brand">
+                    Todo Demo
+                </div>
+            </div>
+
+            <div class="signin navbar-right">
+                <form ng-controller="AuthController" name="authForm" class="signin-form navbar-form">
+                    <div class="form-group">
+                        <input ng-model="user.email" class="email form-control" type="text"
+                               placeholder="Email" required="required" />
+
+                        <input ng-model="user.password" class="password form-control" type="password"
+                               placeholder="Password" required="required" />
+                    </div>
+                    <button ng-click="auth(user)" class="submit btn btn-default">Sign-in or Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="content container-fluid">
+    </div>
+</div>
+
+</body>
+
+</html>
