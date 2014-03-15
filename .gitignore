@@ -22,3 +22,5 @@
 # Ignore compiled assets
 public/style.css
 public/app.js
+public/*.html
+public/**/*.html
