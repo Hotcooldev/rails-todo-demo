@@ -9,15 +9,19 @@ module.exports = angular.module('TodoApp.Todos.TodosController', [
         Todo.create(3, 'Test item 3', 2)
     ]);
 
-    $scope.$watch('todos', updatePriorities, true);
+    $scope.$watch('todos', todoWatcher, true);
 
     $scope.priorityOrderingOptions = {};
 
     $scope.sortByDate = false;
 
-
     function sortByPriority(todos) {
         return $filter('orderBy')(todos, 'priority');
+    }
+
+    function todoWatcher() {
+        updatePriorities();
+        disposeOfDeletedTodos();
     }
 
     function updatePriorities() {
@@ -33,6 +37,15 @@ module.exports = angular.module('TodoApp.Todos.TodosController', [
                 var newPriority = todo.priority;
                 todo.priority = previousTodo.priority;
                 previousTodo.priority = newPriority;
+            }
+        }
+    }
+
+    function disposeOfDeletedTodos() {
+        for (var i = 0; i < $scope.todos.length; ++i) {
+            if ($scope.todos[i].deleted) {
+                $scope.todos.splice(i, 1);
+                --i;
             }
         }
     }

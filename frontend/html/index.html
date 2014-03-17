@@ -71,8 +71,12 @@
                             {{todo.description}}
                         </span>
 
+                        <button ng-click="edit(todo)" class="todo-edit btn btn-primary">Edit</button>
+
+                        <button ng-click="delete(todo)" class="todo-delete btn btn-danger">Delete</button>
+
                         <span ng-show="todo.due" ng-click="edit(todo)" class="priority badge">
-                            {{todo.due}}
+                            due {{todo.due}}
                         </span>
                     </div>
 

@@ -14,4 +14,5 @@ function Todo(id, description, priority, due) {
     this.priority = priority ? priority : 0;
     this.due = due;
     this.isComplete = false;
+    this.deleted = false;
 }

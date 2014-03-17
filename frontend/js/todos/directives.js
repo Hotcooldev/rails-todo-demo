@@ -36,6 +36,10 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
             $scope.cancel = function() {
                 $scope.editorEnabled = false;
             };
+
+            $scope.delete = function(todo) {
+                todo.deleted = true;
+            }
         }
     }
 })

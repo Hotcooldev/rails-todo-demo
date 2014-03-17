@@ -6,4 +6,16 @@
   .todo-complete-true {
     text-decoration: line-through;
   }
+
+  .todo {
+    .todo-edit, .todo-delete {
+      display: none;
+    }
+  }
+
+  .todo:hover {
+    .todo-edit, .todo-delete {
+      display: inline-block;
+    }
+  }
 }
