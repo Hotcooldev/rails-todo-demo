@@ -42,25 +42,45 @@
         <h2 class="heading">My Todos</h2>
 
         <div ng-controller="TodosController" class="todos list-group">
-            <div ng-repeat="todo in todos">
-                <div ng-hide="canShowEditor(todo)" class="list-group-item">
-                    <input ng-model="todo.isComplete" type="checkbox" class="todo-checkbox" />
+            <label>
+                Sort by date
+                <input ng-model="sortByDate" class="todos-sort-by-date form-control" type="checkbox" />
+            </label>
 
-                    <span ng-click="edit(todo)" class="todo-description todo-complete-{{todo.isComplete}}">
-                        {{todo.description}}
-                    </span>
-
-                    <span ng-click="edit(todo)" class="priority badge">
-                        {{todo.priority}}
-                    </span>
+            <div ng-hide="sortByDate">
+                <div ui-sortable="priorityOrderingOptions" ng-model="todos" class="todos-list">
+                    <div ng-repeat="todo in todos" class="todo">
+                        <show-todo todo="todo"></show-todo>
+                    </div>
                 </div>
-
-                <div ng-show="canShowEditor(todo)">
-                    <todo-editor todo="editedTodo" on-save="save" on-cancel="cancel"></todo-editor>
+            </div>
+            <div ng-show="sortByDate">
+                <div ng-repeat="todo in todos | orderBy: 'due'" class="todo">
+                    <show-todo todo="todo"></show-todo>
                 </div>
             </div>
 
-            <div add-todo="todos"></div>
+            <add-todo todos="todos"></add-todo>
+
+            <script type="text/ng-template" id="todos/show-todo">
+                <div class="todo">
+                    <div ng-hide="canShowEditor(todo)" class="list-group-item">
+                        <input ng-model="todo.isComplete" type="checkbox" class="todo-checkbox" />
+
+                        <span ng-click="edit(todo)" class="todo-description todo-complete-{{todo.isComplete}}">
+                            {{todo.description}}
+                        </span>
+
+                        <span ng-show="todo.due" ng-click="edit(todo)" class="priority badge">
+                            {{todo.due}}
+                        </span>
+                    </div>
+
+                    <div ng-show="canShowEditor(todo)">
+                        <todo-editor todo="editedTodo" on-save="save" on-cancel="cancel"></todo-editor>
+                    </div>
+                </div>
+            </script>
 
             <script type="text/ng-template" id="todos/add-todo">
                 <div>
@@ -81,10 +101,7 @@
                             <input ng-model="todo.description" class="todo-input form-control"
                                    type="text" required="required" />
 
-                            <select ng-model="todo.priority"
-                                    ng-options="priority as priority for priority in priorities"
-                                    class="form-control">
-                            </select>
+                            <input ng-model="todo.due" class="todo-input form-control" type="date" />
                         </div>
 
                         <button ng-click="done()" class="add-todo-done-button btn btn-default">Done</button>

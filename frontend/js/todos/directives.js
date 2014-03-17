@@ -2,11 +2,49 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
     require('./todo').name
 ])
 
+.directive('showTodo', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            todo: '=todo'
+        },
+        replace: true,
+        templateUrl: 'todos/show-todo',
+        controller: function($scope) {
+            $scope.originalTodo = null;
+            $scope.editedTodo = null;
+            $scope.editorEnabled = false;
+
+            $scope.canShowEditor = function(todo) {
+                return $scope.editorEnabled
+                    && $scope.originalTodo === todo;
+            };
+
+            $scope.edit = function(todo) {
+                $scope.originalTodo = todo;
+                $scope.editedTodo = angular.copy(todo);
+
+                $scope.editorEnabled = true;
+            };
+
+            $scope.save = function(todo) {
+                angular.copy(todo, $scope.originalTodo);
+
+                $scope.editorEnabled = false;
+            };
+
+            $scope.cancel = function() {
+                $scope.editorEnabled = false;
+            };
+        }
+    }
+})
+
 .directive('addTodo', function() {
     return {
-        restrict: 'A',
+        restrict: 'E',
         scope: {
-            todos: '=addTodo'
+            todos: '=todos'
         },
         replace: true,
         templateUrl: 'todos/add-todo',
@@ -20,6 +58,9 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
             };
 
             $scope.save = function(todo) {
+                var lastTodoPriority = $scope.todos[$scope.todos.length - 1].priority;
+                todo.priority = lastTodoPriority + 1;
+
                 $scope.todos.push(todo);
                 $scope.newTodo = Todo.create();
 
@@ -43,9 +84,7 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
         },
         replace: true,
         templateUrl: 'todos/todo-editor',
-        controller: function($scope, Todo) {
-            $scope.priorities = Todo.priorities;
-
+        controller: function($scope) {
             $scope.done = function() {
                 if ($scope.todoEditorForm.$invalid) {
                     return;

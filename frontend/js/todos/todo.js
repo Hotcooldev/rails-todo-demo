@@ -2,23 +2,16 @@ module.exports = angular.module('TodoApp.Todos.Todo', [])
 
 .factory('Todo', function() {
     return {
-        create: function(description) {
-            return new Todo(description)
-        },
-        priorities: Todo.priorities
+        create: function(id, description, priority) {
+            return new Todo(id, description, priority)
+        }
     }
 });
 
-function Todo(description, priority) {
+function Todo(id, description, priority, due) {
+    this.id = id;
     this.description = description ? description : '';
-    this.priority = priority ? priority : 'normal';
+    this.priority = priority ? priority : 0;
+    this.due = due;
     this.isComplete = false;
 }
-
-Todo.priorities = [
-    'very high',
-    'high',
-    'normal',
-    'low',
-    'very low'
-];
