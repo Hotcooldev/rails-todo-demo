@@ -7,7 +7,7 @@
     <script src="app.js"></script>
 </head>
 
-<body ng-app="todo">
+<body ng-app="TodoApp">
 
 <div class="main">
     <div class="header-container navbar navbar-default">
@@ -18,22 +18,81 @@
                 </div>
             </div>
 
-            <div class="signin navbar-right">
-                <form ng-controller="AuthController" name="authForm" class="signin-form navbar-form">
-                    <div class="form-group">
-                        <input ng-model="user.email" class="email form-control" type="text"
-                               placeholder="Email" required="required" />
+            <div class="signin navbar-right" ui-view="TodoApp.Auth.UiStates.Navbar">
+                <script type="text/ng-template" id="auth/navbar/signin">
+                    <form ng-controller="AuthController" name="authForm" class="signin-form navbar-form">
+                        <div class="form-group">
+                            <input ng-model="user.email" class="email form-control" type="text"
+                                   placeholder="Email" required="required" />
 
-                        <input ng-model="user.password" class="password form-control" type="password"
-                               placeholder="Password" required="required" />
-                    </div>
-                    <button ng-click="auth(user)" class="submit btn btn-default">Sign-in or Register</button>
-                </form>
+                            <input ng-model="user.password" class="password form-control" type="password"
+                                   placeholder="Password" required="required" />
+                        </div>
+                        <button ng-click="auth(user)" class="submit btn btn-default">Sign-in or Register</button>
+                    </form>
+                </script>
+                <script type="text/ng-template" id="auth/navbar/authed">
+                    <div>Hello</div>
+                </script>
             </div>
         </div>
     </div>
 
     <div class="content container-fluid">
+        <h2 class="heading">My Todos</h2>
+
+        <div ng-controller="TodosController" class="todos list-group">
+            <div ng-repeat="todo in todos">
+                <div ng-hide="canShowEditor(todo)" class="list-group-item">
+                    <input ng-model="todo.isComplete" type="checkbox" class="todo-checkbox" />
+
+                    <span ng-click="edit(todo)" class="todo-description todo-complete-{{todo.isComplete}}">
+                        {{todo.description}}
+                    </span>
+
+                    <span ng-click="edit(todo)" class="priority badge">
+                        {{todo.priority}}
+                    </span>
+                </div>
+
+                <div ng-show="canShowEditor(todo)">
+                    <todo-editor todo="editedTodo" on-save="save" on-cancel="cancel"></todo-editor>
+                </div>
+            </div>
+
+            <div add-todo="todos"></div>
+
+            <script type="text/ng-template" id="todos/add-todo">
+                <div>
+                    <div ng-hide="editorEnabled">
+                        <a ng-click="edit()" class="add-todo list-group-item" href="#">Add an item todo</a>
+                    </div>
+
+                    <div ng-show="editorEnabled">
+                        <todo-editor todo="newTodo" on-save="save" on-cancel="cancel"></todo-editor>
+                    </div>
+                </div>
+            </script>
+
+            <script type="text/ng-template" id="todos/todo-editor">
+                <div class="todo-editor list-group-item">
+                    <form name="todoEditorForm">
+                        <div class="form-group">
+                            <input ng-model="todo.description" class="todo-input form-control"
+                                   type="text" required="required" />
+
+                            <select ng-model="todo.priority"
+                                    ng-options="priority as priority for priority in priorities"
+                                    class="form-control">
+                            </select>
+                        </div>
+
+                        <button ng-click="done()" class="add-todo-done-button btn btn-default">Done</button>
+                        <button ng-click="cancel()" class="add-todo-done-button btn btn-default">Cancel</button>
+                    </form>
+                </div>
+            </script>
+        </div>
     </div>
 </div>
 
