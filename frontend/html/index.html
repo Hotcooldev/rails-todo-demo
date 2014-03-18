@@ -36,7 +36,7 @@
                 <script type="text/ng-template" id="auth/navbar/authed">
                     <div>
                         Signed in as {{userEmail}}
-                        <a ng-click="signOut()">Sign out</a>
+                        <a ng-click="signOut()" href="#">Sign out</a>
                     </div>
                 </script>
             </div>
@@ -69,20 +69,32 @@
 
             <script type="text/ng-template" id="todos/show-todo">
                 <div class="todo">
-                    <div ng-hide="canShowEditor(todo)" class="list-group-item">
-                        <input ng-model="todo.isComplete" type="checkbox" class="todo-checkbox" />
+                    <div ng-hide="canShowEditor(todo)" class="todo-item list-group-item">
+                        <div class="fluid-container">
+                            <div class="row">
+                                <div class="todo-primary col-lg-8 col-md-8 col-sm-8">
+                                    <div class="todo-complete">
+                                        <input ng-model="todo.isComplete" type="checkbox" class="todo-checkbox" />
+                                    </div>
 
-                        <span ng-click="edit(todo)" class="todo-description todo-complete-{{todo.isComplete}}">
-                            {{todo.description}}
-                        </span>
+                                    <div ng-click="edit(todo)" class="todo-description todo-complete-{{todo.isComplete}}">
+                                        {{todo.description}}
+                                    </div>
+                                </div>
 
-                        <button ng-click="edit(todo)" class="todo-edit btn btn-primary">Edit</button>
+                                <div class="todo-edit-controls col-lg-2 col-md-2 col-sm-2">
+                                    <button ng-click="edit(todo)" class="todo-edit btn btn-primary">Edit</button>
 
-                        <button ng-click="delete(todo)" class="todo-delete btn btn-danger">Delete</button>
+                                    <button ng-click="delete(todo)" class="todo-delete btn btn-danger">Delete</button>
+                                </div>
 
-                        <span ng-show="todo.due" ng-click="edit(todo)" class="priority badge">
-                            due {{todo.due}}
-                        </span>
+                                <div class="todo-secondary col-lg-2 col-md-2 col-sm-2">
+                                    <span ng-show="todo.due" ng-click="edit(todo)" class="todo-priority badge">
+                                        due {{todo.due}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div ng-show="canShowEditor(todo)">
@@ -94,7 +106,7 @@
             <script type="text/ng-template" id="todos/add-todo">
                 <div>
                     <div ng-hide="editorEnabled">
-                        <a ng-click="edit()" class="add-todo list-group-item" href="#">Add an item todo</a>
+                        <a ng-click="edit()" class="todo-add list-group-item" href="#">Add an item todo</a>
                     </div>
 
                     <div ng-show="editorEnabled">

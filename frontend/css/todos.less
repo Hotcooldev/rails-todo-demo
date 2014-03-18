@@ -3,19 +3,31 @@
     margin-right: 1.5em;
   }
 
+  .todo-primary {
+    .clearfix();
+  }
+
+  .todo-complete {
+    float: left;
+  }
+
   .todo-complete-true {
     text-decoration: line-through;
   }
 
-  .todo {
-    .todo-edit, .todo-delete {
-      display: none;
+  .todo-description {
+    .text-overflow();
+  }
+
+  @media (min-width: @screen-sm-min) {
+    .todo-edit-controls, .todo-secondary {
+      text-align: right;
     }
   }
 
-  .todo:hover {
-    .todo-edit, .todo-delete {
-      display: inline-block;
-    }
+  .todo-edit, .todo-delete {
+    font-size: 0.8em;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
