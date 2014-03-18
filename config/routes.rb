@@ -1,4 +1,19 @@
-Demo::Application.routes.draw do
+TodoApp::Application.routes.draw do
+  #devise_for :users
+
+  devise_for :users,
+             only: [:registrations, :sessions],
+             controllers: {registrations: 'api/registrations', sessions: 'api/sessions'}
+
+  namespace :api, defaults: {format: :json} do
+    devise_scope :user do
+      post 'registrations', to: 'registrations#create'
+
+      post 'sessions', to: 'sessions#create'
+      delete 'sessions', to: 'sessions#destroy'
+    end
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

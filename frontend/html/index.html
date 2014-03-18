@@ -18,9 +18,9 @@
                 </div>
             </div>
 
-            <div class="signin navbar-right" ui-view="TodoApp.Auth.UiStates.Navbar">
+            <div ng-controller="AuthController" class="auth navbar-right" ui-view="TodoApp.Auth.UiStates.Navbar">
                 <script type="text/ng-template" id="auth/navbar/signin">
-                    <form ng-controller="AuthController" name="authForm" class="signin-form navbar-form">
+                    <form name="authForm" class="signin-form navbar-form">
                         <div class="form-group">
                             <input ng-model="user.email" class="email form-control" type="email"
                                    placeholder="Email" required="required" />
@@ -28,11 +28,16 @@
                             <input ng-model="user.password" class="password form-control" type="password"
                                    placeholder="Password" required="required" />
                         </div>
-                        <button ng-click="auth(user)" class="submit btn btn-default">Sign-in or Register</button>
+                        <button ng-click="signIn(user, authForm)" class="submit btn btn-default" type="submit">
+                            Sign-in or Register
+                        </button>
                     </form>
                 </script>
                 <script type="text/ng-template" id="auth/navbar/authed">
-                    <div>Hello</div>
+                    <div>
+                        Signed in as {{userEmail}}
+                        <a ng-click="signOut()">Sign out</a>
+                    </div>
                 </script>
             </div>
         </div>
