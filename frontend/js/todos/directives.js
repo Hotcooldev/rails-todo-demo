@@ -75,7 +75,6 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
                     if ($scope.onSave) {
                         $scope.onSave(todo);
                     }
-                    console.log(todo.isComplete);
                 });
             }
         }

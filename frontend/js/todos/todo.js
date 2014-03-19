@@ -82,6 +82,12 @@ Todo.prototype.delete = function() {
 
 Todo.prototype._create = function() {
     var result = this.$http.post(this.serviceUrl, this._toRequestObject(), {withCredentials: true});
+
+    var context = this;
+    result.success(function(response) {
+        context.id = response.data.id;
+    });
+
     return result;
 };
 
