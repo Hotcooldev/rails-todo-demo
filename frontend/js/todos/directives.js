@@ -6,7 +6,7 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
     var todoEditorScope = null;
 
     return function(scope) {
-        if (todoEditorScope) {
+        if (todoEditorScope && todoEditorScope !== scope) {
             todoEditorScope.cancel();
         }
 
@@ -89,8 +89,12 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
             };
 
             $scope.save = function(todo) {
-                var lastTodoPriority = $scope.todos[$scope.todos.length - 1].priority;
-                todo.priority = lastTodoPriority + 1;
+                if ($scope.todos.length) {
+                    var lastTodoPriority = $scope.todos[$scope.todos.length - 1].priority;
+                    todo.priority = lastTodoPriority + 1;
+                } else {
+                    todo.priority = 0;
+                }
 
                 $scope.todos.push(todo);
 

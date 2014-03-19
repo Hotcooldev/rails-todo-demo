@@ -38,8 +38,6 @@ Todo.all = function(callbackForResults) {
             !response.data
             || !response.data.length
         ) {
-            console.log(response.data);
-            console.log(response.data.length);
             callbackForResults([]);
         }
 
