@@ -2,7 +2,19 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
     require('./todo').name
 ])
 
-.directive('showTodo', function() {
+.factory('CloseLastOpenTodoEditor', function() {
+    var todoEditorScope = null;
+
+    return function(scope) {
+        if (todoEditorScope) {
+            todoEditorScope.cancel();
+        }
+
+        todoEditorScope = scope;
+    }
+})
+
+.directive('showTodo', function(CloseLastOpenTodoEditor) {
     return {
         restrict: 'E',
         scope: {
@@ -25,6 +37,8 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
                 $scope.editedTodo = angular.copy(todo);
 
                 $scope.editorEnabled = true;
+
+                CloseLastOpenTodoEditor($scope);
             };
 
             $scope.save = function(todo) {
@@ -44,7 +58,7 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
     }
 })
 
-.directive('addTodo', function() {
+.directive('addTodo', function(CloseLastOpenTodoEditor) {
     return {
         restrict: 'E',
         scope: {
@@ -59,6 +73,8 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
 
             $scope.edit = function() {
                 $scope.editorEnabled = true;
+
+                CloseLastOpenTodoEditor($scope);
             };
 
             $scope.save = function(todo) {

@@ -17,5 +17,6 @@ angular.module('TodoApp', [
     require('./auth/auth-form-controller').name,
     require('./auth/signed-in-controller').name,
     require('./todos/todos-controller').name,
-    require('./todos/directives').name
+    require('./todos/directives').name,
+    require('./todos/date-filter').name
 ]);

@@ -127,7 +127,7 @@
 
                             <div class="todo-secondary col-lg-2 col-md-2 col-sm-2">
                                     <span ng-show="todo.due" ng-click="edit(todo)" class="todo-priority badge">
-                                        due {{todo.due}}
+                                        due {{todo.due | todoDateFilter}}
                                     </span>
                             </div>
                         </div>
