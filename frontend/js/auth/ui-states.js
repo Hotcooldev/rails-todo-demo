@@ -51,7 +51,11 @@ module.exports = angular.module('TodoApp.Auth.UiStates', [
             },
             onEnter: function($state, AuthService) {
                 if (!AuthService.isAuthed) {
-                    $state.go('anonymous');
+                    if (AuthService.authedEmailFromCookie()) {
+                        $state.go('authenticating');
+                    } else {
+                        $state.go('anonymous');
+                    }
                 }
             }
         })
