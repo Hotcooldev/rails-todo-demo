@@ -89,17 +89,17 @@
                 <div ng-hide="sortByDate">
                     <div ui-sortable="priorityOrderingOptions" ng-model="todos" class="todos-list">
                         <div ng-repeat="todo in todos" class="todo">
-                            <show-todo todo="todo"></show-todo>
+                            <show-todo todo="todo" on-save="createTodo" on-delete="deleteTodo"></show-todo>
                         </div>
                     </div>
                 </div>
                 <div ng-show="sortByDate">
                     <div ng-repeat="todo in todos | orderBy: 'due'" class="todo">
-                        <show-todo todo="todo"></show-todo>
+                        <show-todo todo="todo" on-save="createTodo" on-delete="deleteTodo"></show-todo>
                     </div>
                 </div>
 
-                <add-todo todos="todos"></add-todo>
+                <add-todo todos="todos" on-save="createTodo"></add-todo>
 
             </div>
         </script>

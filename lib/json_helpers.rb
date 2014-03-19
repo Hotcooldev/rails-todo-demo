@@ -68,7 +68,7 @@ module JsonHelpers
     end
 
     def append_to_response(key, value)
-      @response[key] = value unless value.blank?
+      @response[key] = value
     end
 
     def to_hash

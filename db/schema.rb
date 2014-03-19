@@ -11,10 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140317205332) do
+ActiveRecord::Schema.define(version: 20140319064733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "todos", force: true do |t|
+    t.integer  "user_id",                                 null: false
+    t.string   "client_token", limit: 32,                 null: false
+    t.string   "description",                             null: false
+    t.integer  "priority",                                null: false
+    t.date     "due"
+    t.boolean  "is_complete",             default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "todos", ["user_id", "client_token"], name: "index_todos_on_user_id_and_client_token", unique: true, using: :btree
+  add_index "todos", ["user_id", "priority"], name: "index_todos_on_user_id_and_priority", unique: true, using: :btree
+  add_index "todos", ["user_id"], name: "index_todos_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

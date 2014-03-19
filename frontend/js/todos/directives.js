@@ -18,7 +18,9 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
     return {
         restrict: 'E',
         scope: {
-            todo: '=todo'
+            todo: '=',
+            onSave: '=?',
+            onDelete: '=?'
         },
         replace: true,
         templateUrl: 'todos/show-todo',
@@ -44,6 +46,10 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
             $scope.save = function(todo) {
                 angular.copy(todo, $scope.originalTodo);
 
+                if ($scope.onSave) {
+                    $scope.onSave(todo);
+                }
+
                 $scope.editorEnabled = false;
             };
 
@@ -53,6 +59,10 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
 
             $scope.delete = function(todo) {
                 todo.deleted = true;
+
+                if ($scope.onDelete) {
+                    $scope.onDelete(todo);
+                }
             }
         }
     }
@@ -62,7 +72,8 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
     return {
         restrict: 'E',
         scope: {
-            todos: '=todos'
+            todos: '=',
+            onSave: '=?'
         },
         replace: true,
         templateUrl: 'todos/add-todo',
@@ -82,6 +93,11 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
                 todo.priority = lastTodoPriority + 1;
 
                 $scope.todos.push(todo);
+
+                if ($scope.onSave) {
+                    $scope.onSave(todo);
+                }
+
                 $scope.newTodo = Todo.create();
 
                 $scope.editorEnabled = false;
@@ -98,9 +114,9 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
     return {
         restrict: 'E',
         scope: {
-            todo: '=todo',
-            onSave: '=onSave',
-            onCancel: '=onCancel'
+            todo: '=',
+            onSave: '=',
+            onCancel: '='
         },
         replace: true,
         templateUrl: 'todos/todo-editor',

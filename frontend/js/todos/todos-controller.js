@@ -3,17 +3,32 @@ module.exports = angular.module('TodoApp.Todos.TodosController', [
 ])
 
 .controller('TodosController', function($scope, $filter, Todo) {
-    $scope.todos = sortByPriority([
-        Todo.create(1, 'Test item 1', 1),
-        Todo.create(2, 'Test item 2', 0),
-        Todo.create(3, 'Test item 3', 2)
-    ]);
+    $scope.todos = [];
 
     $scope.$watch('todos', todoWatcher, true);
 
     $scope.priorityOrderingOptions = {};
 
     $scope.sortByDate = false;
+
+    fetchAllTodos();
+
+    $scope.createTodo = function(todo) {
+        todo.save();
+    };
+
+    $scope.updateTodo = function(todo) {
+        todo.save();
+    };
+
+    $scope.deleteTodo = function(todo) {
+    };
+
+    function fetchAllTodos() {
+        Todo.all(function(todos) {
+            $scope.todos = sortByPriority(todos);
+        });
+    }
 
     function sortByPriority(todos) {
         return $filter('orderBy')(todos, 'priority');

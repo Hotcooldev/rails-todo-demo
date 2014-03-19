@@ -12,6 +12,8 @@ TodoApp::Application.routes.draw do
       post 'sessions', to: 'sessions#create'
       delete 'sessions', to: 'sessions#destroy'
     end
+
+    resources :todos, only: [:index, :show, :create, :update, :destroy]
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
