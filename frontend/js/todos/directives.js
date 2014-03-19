@@ -89,6 +89,15 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
         replace: true,
         templateUrl: 'todos/todo-editor',
         controller: function($scope) {
+            $scope.canShowDatePicker = false;
+
+            $scope.openDatePicker = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                $scope.canShowDatePicker = true;
+            };
+
             $scope.done = function() {
                 if ($scope.todoEditorForm.$invalid) {
                     return;

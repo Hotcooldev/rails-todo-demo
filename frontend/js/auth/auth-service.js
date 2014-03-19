@@ -1,33 +1,12 @@
 require('angular-cookie');
 
 module.exports = angular.module('TodoApp.Auth.AuthService', [
+    require('./registration').name,
     require('./session').name,
     'ivpusic.cookie'
 ])
 
-.factory('AuthService', function(Session, $q, $state, ipCookie) {
-    function createCookie(userEmail) {
-        ipCookie('authedUserEmail', userEmail);
-    }
-
-    function hasSession() {
-        return ipCookie('authedUserEmail');
-    }
-
-    function resetAuth(AuthService) {
-        AuthService.isAuthed = false;
-        AuthService.userEmail = null;
-        createCookie(null);
-
-        $state.go('anonymous');
-    }
-
-    function callEventHandlers(callbacks) {
-        for(var i = 0; i < callbacks.length; ++i) {
-            callbacks[i]();
-        }
-    }
-
+.factory('AuthService', function(Registration, Session, $q, $state, ipCookie) {
     var module = {
         isAuthed: false,
         userEmail: null,
@@ -35,35 +14,60 @@ module.exports = angular.module('TodoApp.Auth.AuthService', [
         onSignIn: [],
         onSignOut: [],
 
+        register: function(email, password) {
+            var context = this;
+
+            var registration = Registration.create();
+            var result = registration.register(email, password);
+
+            result
+                .success(function() {
+                    context._signInSuccess(email);
+                })
+            ;
+
+            return result;
+        },
+
         signIn: function(email, password) {
             var context = this;
+
             var session = Session.create();
+            var result = session.signIn(email, password);
 
-            var promise = session.signIn(email, password);
-
-            promise
+            result
                 .success(function(response) {
-                    context.isAuthed = true;
-                    context.userEmail = response.data.userEmail;
-
-                    createCookie(context.userEmail);
-
-                    $state.go('authed');
-
-                    callEventHandlers(context.onSignIn);
+                    context._signInSuccess(response.data.userEmail);
                 })
-                .error(function(response) {
-                    resetAuth(context);
-
-                    callEventHandlers(context.onSignOut);
+                .error(function() {
+                    context._signInError();
                 })
             ;
             
-            return promise;
+            return result;
         },
 
+        _signInSuccess: function(email) {
+            this.isAuthed = true;
+            this.userEmail = email;
+
+            this._createCookie();
+
+            $state.go('authed');
+
+            this._callEventHandlers(this.onSignIn);
+        },
+
+        _signInError: function() {
+            this._resetAuth();
+
+            this._callEventHandlers(this.onSignOut);
+        } ,
+
         reload: function() {
-            if (hasSession()) {
+            if (this.authedEmailFromCookie()) {
+                $state.go('authenticating');
+
                 this.signIn();
             }
         },
@@ -71,13 +75,35 @@ module.exports = angular.module('TodoApp.Auth.AuthService', [
         signOut: function() {
             var session = Session.create();
 
-            var promise = session.signOut();
+            var result = session.signOut();
 
-            resetAuth(this);
+            this._resetAuth();
 
-            callEventHandlers(this.onSignOut);
+            this._callEventHandlers(this.onSignOut);
 
-            return promise;
+            return result;
+        },
+
+        authedEmailFromCookie: function() {
+            return ipCookie('authedUserEmail');
+        },
+
+        _createCookie: function() {
+            ipCookie('authedUserEmail', this.userEmail);
+        },
+
+        _resetAuth: function() {
+            this.isAuthed = false;
+            this.userEmail = null;
+            this._createCookie();
+
+            $state.go('anonymous');
+        },
+
+        _callEventHandlers: function(callbacks) {
+            for(var i = 0; i < callbacks.length; ++i) {
+                callbacks[i]();
+            }
         }
     };
 

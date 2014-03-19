@@ -1,7 +1,4 @@
-require('angular-resource');
-
 module.exports = angular.module('TodoApp.Auth.Session', [
-    'ngResource'
 ])
 
 .factory('Session', function($http) {
