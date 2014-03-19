@@ -3,26 +3,35 @@ moment = require('moment');
 module.exports = angular.module('TodoApp.Todos.DateFilter', [])
 
 .filter('todoDateFilter', function() {
-    return function(date) {
-        if (!date) {
-            return '';
+    return function(due) {
+        if (!due) {
+            return 'sometime';
         }
 
-        date = moment(date);
-        var today = moment();
+        var today = moment().startOf('day');
+        due = moment(due).startOf('day').zone(today.zone());
 
-        if (Math.abs(date.diff(today, 'days')) > 3) {
-            return date.format('YYYY-MM-DD');
-        } else if (Math.abs(date.diff(today, 'hours')) < 24) {
-            if (date.day() > today.day()) {
+        if (!due.isValid() || !today.isValid()) {
+            return 'sometime';
+        }
+
+        var daysDifference = Math.abs(due.diff(today, 'days'));
+        if (daysDifference > 3) {
+            return due.format('YYYY-MM-DD');
+        } else if (daysDifference <= 1) {
+            if (due.day() > today.day()) {
                 return 'in a day';
-            } else if (date.day() < today.day()) {
+            } else if (due.day() < today.day()) {
                 return 'a day ago';
             } else {
                 return 'today';
             }
         } else {
-            return date.fromNow();
+            if (due.day() > today.day()) {
+                return 'in ' + daysDifference + ' days';
+            } else {
+                return daysDifference + ' days ago';
+            }
         }
     };
 });

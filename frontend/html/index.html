@@ -81,9 +81,9 @@
             <h2 class="heading">My Todos</h2>
 
             <div ng-controller="TodosController" class="todos list-group">
-                <label>
+                <label class="todos-sort-by-date-container checkbox">
                     Sort by date
-                    <input ng-model="sortByDate" class="todos-sort-by-date form-control" type="checkbox" />
+                    <input ng-model="sortByDate" class="todos-sort-by-date" type="checkbox" />
                 </label>
 
                 <div ng-hide="sortByDate">
@@ -111,7 +111,8 @@
                         <div class="row">
                             <div class="todo-primary col-lg-8 col-md-8 col-sm-8">
                                 <div class="todo-complete">
-                                    <input ng-model="todo.isComplete" type="checkbox" class="todo-checkbox" />
+                                    <input ng-click="toggleComplete(todo)" ng-model="todo.isComplete"
+                                           type="checkbox" class="todo-checkbox" />
                                 </div>
 
                                 <div ng-click="edit(todo)" class="todo-description todo-complete-{{todo.isComplete}}">
@@ -156,18 +157,26 @@
             <div class="todo-editor list-group-item">
                 <form name="todoEditorForm">
                     <div class="form-group">
-                        <input ng-model="todo.description" class="todo-input form-control"
-                               type="text" required="required" />
+                        <div class="fluid-container row">
 
-                        <div class="input-group">
-                            <input ng-model="todo.due" datepicker-popup="yyyy-MM-dd" show-weeks="false"
-                                   is-open="canShowDatePicker"
-                                   class="todo-input form-control" type="text" />
+                            <div class="col-xs-9">
+                                <input ng-model="todo.description" class="todo-input form-control"
+                                       type="text" required="required" placeholder="What do you have to do?" />
+                            </div>
 
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" ng-click="openDatePicker($event)">
-                                    <i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
+                            <div class="col-xs-3">
+                                <div class="input-group">
+                                    <input ng-model="todo.due" datepicker-popup="yyyy-MM-dd" show-weeks="false"
+                                           is-open="canShowDatePicker"
+                                           class="todo-input form-control" type="text" placeholder="Due (optional)" />
+
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="openDatePicker($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 

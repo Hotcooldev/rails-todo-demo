@@ -1,3 +1,5 @@
+var moment = require('moment')
+
 module.exports = angular.module('TodoApp.Todos.Todo', [])
 
 .factory('Todo', function($http) {
@@ -49,7 +51,7 @@ Todo.all = function(callbackForResults) {
                 todoData.id,
                 todoData.description,
                 todoData.priority,
-                todoData.due,
+                todoData.due ? moment(todoData.due).toDate() : null,
                 todoData.is_complete,
                 todoData.client_token
             ));
@@ -62,8 +64,51 @@ Todo.all = function(callbackForResults) {
 };
 
 Todo.prototype._generateClientToken = function() {
-    this.clientToken = Date.now();
+    return this.clientToken = Date.now();
 };
 
 Todo.prototype.save = function() {
+    if (this.id) {
+        return this._update();
+    } else {
+        return this._create();
+    }
+};
+
+Todo.prototype.delete = function() {
+    var result = this.$http.delete(this.serviceUrl + '/' + this.id, {withCredentials: true});
+    return result;
+};
+
+Todo.prototype._create = function() {
+    var result = this.$http.post(this.serviceUrl, this._toRequestObject(), {withCredentials: true});
+    return result;
+};
+
+Todo.prototype._update = function() {
+    var result = this.$http.put(this.serviceUrl + '/' + this.id, this._toRequestObject(), {withCredentials: true});
+    return result;
+};
+
+Todo.prototype._translateDate = function() {
+    if (!this.due) {
+        return null;
+    }
+
+    var date = moment(this.due);
+    if (date.isValid()) {
+        return date.format('YYYY-MM-DD');
+    } else {
+        return null;
+    }
+};
+
+Todo.prototype._toRequestObject = function() {
+    return {todo: {
+        client_token: this.clientToken,
+        description: this.description,
+        priority: this.priority,
+        due: this._translateDate(),
+        is_complete: this.isComplete
+    }};
 };

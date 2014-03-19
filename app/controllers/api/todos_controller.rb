@@ -28,6 +28,9 @@ class Api::TodosController < ApplicationController
 
   # PATCH/PUT /todos/1
   def update
+    puts @todo.inspect
+    puts todo_params.inspect
+    puts @todo.method(:update).parameters
     if @todo.update(todo_params)
       respond_with_success 'Todo was updated'
     else

@@ -22,6 +22,7 @@ module.exports = angular.module('TodoApp.Todos.TodosController', [
     };
 
     $scope.deleteTodo = function(todo) {
+        todo.delete();
     };
 
     function fetchAllTodos() {
@@ -52,6 +53,9 @@ module.exports = angular.module('TodoApp.Todos.TodosController', [
                 var newPriority = todo.priority;
                 todo.priority = previousTodo.priority;
                 previousTodo.priority = newPriority;
+
+                $scope.updateTodo(previousTodo);
+                $scope.updateTodo(todo);
             }
         }
     }

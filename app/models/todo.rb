@@ -8,16 +8,15 @@ class Todo < ActiveRecord::Base
 
   validates :description, presence: true
 
-  validates :priority, presence: true, numericality: true,
-            uniqueness: {scope: :user_id, message: 'A record already exists with that priority'}
+  validates :priority, presence: true, numericality: true
 
   scope :for_user, ->(user) { where(user: user) }
 
   def self.find_for_user(user, id)
-    for_user(user).where(id: id)
+    for_user(user).where(id: id).first
   end
 
   def self.find_all_for_user(user)
-    for_user(user)
+    for_user(user).all
   end
 end

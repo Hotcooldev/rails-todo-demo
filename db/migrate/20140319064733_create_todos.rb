@@ -14,7 +14,6 @@ class CreateTodos < ActiveRecord::Migration
 
       t.index :user_id
       t.index [:user_id, :client_token], unique: true
-      t.index [:user_id, :priority], unique: true
     end
   end
 end

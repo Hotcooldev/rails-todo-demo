@@ -28,7 +28,6 @@ ActiveRecord::Schema.define(version: 20140319064733) do
   end
 
   add_index "todos", ["user_id", "client_token"], name: "index_todos_on_user_id_and_client_token", unique: true, using: :btree
-  add_index "todos", ["user_id", "priority"], name: "index_todos_on_user_id_and_priority", unique: true, using: :btree
   add_index "todos", ["user_id"], name: "index_todos_on_user_id", using: :btree
 
   create_table "users", force: true do |t|

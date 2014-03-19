@@ -24,7 +24,7 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
         },
         replace: true,
         templateUrl: 'todos/show-todo',
-        controller: function($scope) {
+        controller: function($scope, $timeout) {
             $scope.originalTodo = null;
             $scope.editedTodo = null;
             $scope.editorEnabled = false;
@@ -44,6 +44,11 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
             };
 
             $scope.save = function(todo) {
+                if (angular.equals(todo, $scope.originalTodo)) {
+                    $scope.editorEnabled = false;
+                    return;
+                }
+
                 angular.copy(todo, $scope.originalTodo);
 
                 if ($scope.onSave) {
@@ -63,6 +68,15 @@ module.exports = angular.module('TodoApp.Todos.Directives', [
                 if ($scope.onDelete) {
                     $scope.onDelete(todo);
                 }
+            }
+
+            $scope.toggleComplete = function(todo) {
+                $timeout(function() {
+                    if ($scope.onSave) {
+                        $scope.onSave(todo);
+                    }
+                    console.log(todo.isComplete);
+                });
             }
         }
     }
