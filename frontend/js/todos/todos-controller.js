@@ -7,7 +7,9 @@ module.exports = angular.module('TodoApp.Todos.TodosController', [
 
     $scope.$watch('todos', todoWatcher, true);
 
-    $scope.priorityOrderingOptions = {};
+    $scope.priorityOrderingOptions = {
+        placeholder: 'todo-move-placeholder'
+    };
 
     $scope.sortByDate = false;
 

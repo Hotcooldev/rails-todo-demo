@@ -1,10 +1,28 @@
 .todos {
+  .todo {
+    cursor: move;
+  }
+
+  .todo:hover .todo-item {
+    border-left: 5px solid #dcdcdc;
+    padding-left: 11px;
+  }
+
+  .todo-move-placeholder {
+    .list-group-item();
+    background: #efefef;
+  }
+
   .todo-checkbox {
     margin-right: 1.5em;
   }
 
   .todo-primary {
     .clearfix();
+  }
+
+  .todo-description {
+    cursor: pointer;
   }
 
   .todo-complete {
